@@ -1,6 +1,9 @@
  package com.example.weatherappcompose
 
+import android.app.DownloadManager.Request
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -15,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,8 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.weatherappcompose.ui.theme.WeatherAppComposeTheme
 
+ const val API_KEY = "012c748818fd41bbbdf112239221805"
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +41,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    Greeting("London", this)
                 }
             }
         }
@@ -42,7 +49,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
+fun Greeting(name: String, context: Context) {
     val state = remember{
         mutableStateOf("Unknown")
     }
@@ -51,14 +58,14 @@ fun Greeting(name: String) {
             .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "Temp in $name")
+            Text(text = "Temp in $name = ${state.value}")
         }
         Box(modifier = Modifier.fillMaxHeight()
             .fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
             ) {
             Button(onClick = {
-
+                             getResult(name, state, context)
             }, modifier = Modifier.padding(5.dp)
                 .fillMaxWidth()
                 ) {
@@ -70,10 +77,21 @@ fun Greeting(name: String) {
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WeatherAppComposeTheme {
-        Greeting("Android")
-    }
-}
+ private fun getResult(city: String,state: MutableState<String>, context: Context) {
+     val url = "https://api.weatherapi.com/v1/current.json" + "?key=$API_KEY&" + "q=$city" +"&aqi=no"
+
+     val queue = Volley.newRequestQueue(context)
+     val stringRequest = StringRequest(
+         com.android.volley.Request.Method.GET,
+         url,
+         {
+             response ->
+                state.value = response
+         },
+         {
+             error ->
+             Log.d("MyLog", "Error $error")
+         }
+     )
+     queue.add(stringRequest)
+ }
