@@ -29,8 +29,9 @@ import androidx.compose.ui.unit.dp
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.weatherappcompose.ui.theme.WeatherAppComposeTheme
+import org.json.JSONObject
 
- const val API_KEY = "012c748818fd41bbbdf112239221805"
+ const val API_KEY = "53a8528f084b4d5a8ca181609232912"
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("London", this)
+                    Greeting("Chelyabinsk", this)
                 }
             }
         }
@@ -58,7 +59,7 @@ fun Greeting(name: String, context: Context) {
             .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "Temp in $name = ${state.value}")
+            Text(text = "Temp in $name = ${state.value} °C")
         }
         Box(modifier = Modifier.fillMaxHeight()
             .fillMaxWidth(),
@@ -86,7 +87,8 @@ fun Greeting(name: String, context: Context) {
          url,
          {
              response ->
-                state.value = response
+             val obj = JSONObject(response)
+             state.value = obj.getJSONObject("current").getString("temp_c")
          },
          {
              error ->
