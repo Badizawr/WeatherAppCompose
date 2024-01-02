@@ -156,6 +156,10 @@ fun TabLayout() {
                     )
                 }
             }
+            Text(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = "Text tab ${state.value + 1} selected",
+            )
         }
     }
 }
