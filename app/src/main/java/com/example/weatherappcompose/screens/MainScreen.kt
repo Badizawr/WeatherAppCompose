@@ -39,8 +39,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.ui.layout.ContentScale
+import com.example.weatherappcompose.data.WeatherModel
 import com.example.weatherappcompose.ui.theme.WhiteLight
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
@@ -141,7 +143,7 @@ fun TabLayout(){
                 start = 5.dp,
                 end = 5.dp
             )
-            .clip(RoundedCornerShape(5.dp))
+            .clip(RoundedCornerShape(10.dp))
     ) {
         TabRow(
             selectedTabIndex = tabIndex,
@@ -176,9 +178,31 @@ fun TabLayout(){
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ){
-                items(15){
-                    ListItemUI()
-                }
+                itemsIndexed(
+                    listOf(
+                        WeatherModel(
+                            "London",
+                            "10:00",
+                            "23°C",
+                            "Sunny",
+                            "//cdn.weatherapi.com/weather/64x64/night/296.png",
+                            "",
+                            "",
+                            "",
+                        ),
+                        WeatherModel(
+                            "London",
+                            "05/01/2024",
+                            "",
+                            "Sunny",
+                            "//cdn.weatherapi.com/weather/64x64/night/296.png",
+                            "23°",
+                            "10°",
+                            "sdgfujkgdeioslghiu",
+                        )
+                    )){
+                       _, item -> ListItemUI(item)
+                    }
             }
 
         }
