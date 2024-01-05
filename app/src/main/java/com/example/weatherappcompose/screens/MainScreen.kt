@@ -1,6 +1,5 @@
 package com.example.weatherappcompose.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,6 +37,11 @@ import com.example.weatherappcompose.R
 import com.example.weatherappcompose.ui.theme.BlueLight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.ui.layout.ContentScale
+import com.example.weatherappcompose.ui.theme.WhiteLight
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
@@ -125,48 +127,61 @@ fun MainCard() {
         }
     }
 }
-
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout() {
-    var state = remember { mutableStateOf(0) }
-    val titles = listOf("HOURS", "DAYS")
-    Column() {
-        Column(
-            modifier = Modifier
-                .alpha(0.75f)
-                .padding(horizontal = 5.dp)
-                .clip(RoundedCornerShape(5.dp))
-        ) {
-            TabRow(
-                modifier = Modifier.clip(RoundedCornerShape(5.dp)),
-                selectedTabIndex = state.value,
+fun TabLayout(){
+    val tabList = listOf("HOURS", "DAYS")
+    val pagerState = rememberPagerState()
+    val tabIndex = pagerState.currentPage
+    val coroutineScope = rememberCoroutineScope()
 
-                ) {
-                titles.forEachIndexed { index, title ->
-                    Tab(
-                        selected = state.value == index,
-                        onClick = { state.value = index },
-                        text = {
-                            Text(
-                                text = title,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                color = Color.Black
-                            )
-                        },
-                    )
+    Column(
+        modifier = Modifier
+            .padding(
+                start = 5.dp,
+                end = 5.dp
+            )
+            .clip(RoundedCornerShape(5.dp))
+    ) {
+        TabRow(
+            selectedTabIndex = tabIndex,
+            indicator = { pos ->
+                TabRowDefaults.Indicator(
+                    Modifier.pagerTabIndicatorOffset(pagerState, pos)
+                )
+            },
+            backgroundColor = WhiteLight,
+            contentColor = Color.Black
+        ) {
+            tabList.forEachIndexed{index, text ->
+                Tab(
+                    selected = false,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = {
+                        Text(text = text)
+                    }
+                )
+            }
+        }
+        HorizontalPager(
+            count = tabList.size,
+            state = pagerState,
+            modifier = Modifier.weight(1.0f)
+        ) {
+                index ->
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ){
+                items(15){
+                    ListItemUI()
                 }
             }
-            HorizontalPager(
-                count = titles.size,
-            ) {
-                index -> LazyColumn(modifier = Modifier.fillMaxSize()){
-                    items(15) {
-                        ListItemUI()
-                    }
-            }
-            }
+
         }
     }
 }
+
