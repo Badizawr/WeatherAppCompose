@@ -129,9 +129,10 @@ fun MainCard() {
         }
     }
 }
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout(){
+fun TabLayout() {
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
@@ -155,7 +156,7 @@ fun TabLayout(){
             backgroundColor = WhiteLight,
             contentColor = Color.Black
         ) {
-            tabList.forEachIndexed{index, text ->
+            tabList.forEachIndexed { index, text ->
                 Tab(
                     selected = false,
                     onClick = {
@@ -173,11 +174,10 @@ fun TabLayout(){
             count = tabList.size,
             state = pagerState,
             modifier = Modifier.weight(1.0f)
-        ) {
-                index ->
+        ) { index ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
-            ){
+            ) {
                 itemsIndexed(
                     listOf(
                         WeatherModel(
@@ -200,9 +200,10 @@ fun TabLayout(){
                             "10°",
                             "sdgfujkgdeioslghiu",
                         )
-                    )){
-                       _, item -> ListItemUI(item)
-                    }
+                    )
+                ) { _, item ->
+                    ListItemUI(item)
+                }
             }
 
         }
