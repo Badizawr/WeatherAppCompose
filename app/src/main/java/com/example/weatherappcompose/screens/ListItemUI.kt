@@ -54,13 +54,14 @@ fun ListItemUI(item: WeatherModel) {
                     color = Color.Black
                 )
                 Text(
-                    text = item.condition,
+                    text = "${item.condition}",
                     style = TextStyle(fontSize = 15.sp),
                     color = Color.Black
                 )
             }
             Text(
-                text = item.currentTemp.ifEmpty { "${item.minTemp} / ${item.maxTemp}" },
+                text = item.currentTemp.ifEmpty { "${item.minTemp.toFloat().toInt()}°C" +
+                        "/ ${item.maxTemp.toFloat().toInt()}°C"},
                 style = TextStyle(fontSize = 25.sp),
                 color = Color.Black
             )
