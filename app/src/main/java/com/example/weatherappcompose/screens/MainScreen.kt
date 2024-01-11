@@ -53,7 +53,7 @@ import org.json.JSONObject
 
 
 @Composable
-fun MainCard(currentDay: MutableState<WeatherModel>) {
+fun MainCard(currentDay: MutableState<WeatherModel>, onClickSync: () -> Unit, onClickSearch: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(5.dp),
@@ -109,7 +109,9 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        onClickSearch.invoke()
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_search),
                             contentDescription = "img3",
@@ -123,7 +125,9 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
                         style = TextStyle(fontSize = 16.sp),
                         color = Color.Black
                     )
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        onClickSync.invoke()
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_autorenew),
                             contentDescription = "img4",

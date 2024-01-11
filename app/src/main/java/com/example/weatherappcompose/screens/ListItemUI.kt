@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -51,7 +54,7 @@ fun ListItemUI(item: WeatherModel, currentDay: MutableState<WeatherModel>) {
             .alpha(0.75f)
             .padding(top = 3.dp)
             .clickable {
-                if(item.hours.isEmpty()) return@clickable
+                if (item.hours.isEmpty()) return@clickable
                 currentDay.value = item
             }
             .background(BlueLight),
@@ -99,4 +102,34 @@ fun ListItemUI(item: WeatherModel, currentDay: MutableState<WeatherModel>) {
         }
 
     }
+}
+
+@Composable
+fun DialogSearch(dialogState: MutableState<Boolean>) {
+    AlertDialog(onDismissRequest = {
+        dialogState.value = false
+    },
+        confirmButton = {
+            TextButton(onClick = {
+                dialogState.value = false
+            }) {
+                Text(text = "OK")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = {
+                dialogState.value = false
+            }) {
+                Text(text = "Cansel")
+            }
+        },
+        title = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Enter the name of the city")
+                TextField(value = "Text", onValueChange = {
+
+                })
+            }
+        }
+    )
 }
