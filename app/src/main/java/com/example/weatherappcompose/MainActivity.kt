@@ -38,9 +38,6 @@ class MainActivity : ComponentActivity() {
             val dialogState= remember {
                 mutableStateOf(false)
             }
-            if (dialogState.value){
-                DialogSearch(dialogState)
-            }
             val currentDay = remember {
                 mutableStateOf(
                     WeatherModel(
@@ -54,6 +51,11 @@ class MainActivity : ComponentActivity() {
                         ""
                     )
                 )
+            }
+            if (dialogState.value){
+                DialogSearch(dialogState, onSubmit = {
+                    getData(it, this, daysList, currentDay)
+                })
             }
             getData("Chelyabinsk", this, daysList, currentDay)
             Image(
